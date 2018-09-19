@@ -350,13 +350,13 @@
 <ul>
 <li><p>图像预处理（将提取到的图片统一大小和灰度化）</p>
 <p>  <img src="https://raw.githubusercontent.com/dxyoo7/dxyoo7.github.io/hexo/attachment/face_detection/audrey_hepburn.jpg" alt=""></p>
-<p>  颜色信息对于人脸识别没有作用，灰度化和减少图片大小后，数据计算量和资源损耗大大减少，检测速度增加。</p>
+<p>  一般来说，计算机中的彩色图片都是由若干个色彩通道累积出来的，比如 RGB 模式的图片，有红色通道(Red)，绿色通道(Green)和蓝色通道(Blue)，这三个通道都是灰度图，比如一个点由8位来表示，则一个通道可以表示 2^8=256 个灰度。那样三个通道进行叠加以后可以表3*8=24位种色彩，也就是我们常说的24位真彩。对这样的图片做处理，无疑是一件很复杂的事，所以有必要先将彩色图转为灰度图，那样可以就减少数据量（颜色信息对于人脸识别没有作用）。灰度化和减少图片大小后，数据计算量和资源损耗大大减少，检测速度增加。</p>
 </li>
 <li><p>构造级联分类器（Cascade Classfier）</p>
 <p>  什么是级联的分类器呢？级联分类器是由若干个简单分类器级联成的一个大的分类器，被检测的窗口依次通过每一个分类器，可以通过所有分类器的窗口即可判定为目标区域。</p>
 <p>  加载已经训练好的内置模型 haarcascade_frontalface_alt.xml，构建级联分类器。分类器可以加载不同类型的模型，OpenCV 内置了很多模型</p>
 <p>  <img src="https://ws1.sinaimg.cn/large/676b2067gy1fvemrhqsj2j20ac0i0wgx.jpg" alt=""></p>
-<p>  其中 Haar 模型特征分为3种</p>
+<p>  基础分类器以 Haar特征为输入，以 0/1 为输出，0表示未匹配，1表示匹配。其中 Haar 模型特征分为3种</p>
 <p>  <img src="http://dl2.iteye.com/upload/attachment/0014/3392/cce5515b-bd05-32e5-9ce2-12a9cfb839b1.png" alt=""></p>
 <ul>
 <li>边界特征，包含四种</li>
