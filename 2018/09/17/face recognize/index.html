@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="概念人脸识别（Face Recognition）是一种依据人的面部特征进行身份识别，定位，查找的一种生物识别技术。生物特征识别技术所研究的生物特征包括脸、指纹、手掌纹、虹膜、视网膜、声音（语音）、体形、个人习惯（例如敲击键盘的力度和频率、签字）等，相应的识别技术就有人脸识别、指纹识别、掌纹识别、虹膜识别、视网膜识别、语音识别（用语音识别可以进行身份识别，也可以进行语音内容的识别，只有前者属于生物特">
+<meta property="og:type" content="article">
+<meta property="og:title" content="人脸识别简介">
+<meta property="og:url" content="http://www.ccwork.com.cn/2018/09/17/face recognize/index.html">
+<meta property="og:site_name" content="织语移动端">
+<meta property="og:description" content="概念人脸识别（Face Recognition）是一种依据人的面部特征进行身份识别，定位，查找的一种生物识别技术。生物特征识别技术所研究的生物特征包括脸、指纹、手掌纹、虹膜、视网膜、声音（语音）、体形、个人习惯（例如敲击键盘的力度和频率、签字）等，相应的识别技术就有人脸识别、指纹识别、掌纹识别、虹膜识别、视网膜识别、语音识别（用语音识别可以进行身份识别，也可以进行语音内容的识别，只有前者属于生物特">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/dxyoo7/dxyoo7.github.io/hexo/attachment/face_detection/auto_focus.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/dxyoo7/dxyoo7.github.io/hexo/attachment/face_detection/audrey_hepburn.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/676b2067gy1fvemrhqsj2j20ac0i0wgx.jpg">
+<meta property="og:image" content="http://dl2.iteye.com/upload/attachment/0014/3392/cce5515b-bd05-32e5-9ce2-12a9cfb839b1.png">
+<meta property="og:image" content="http://origin-images0.cnblogs.com/blog/537106/201504/052157319606741.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/dxyoo7/dxyoo7.github.io/hexo/attachment/face_detection/landmark_68_point.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/676b2067gy1fveu47yp43j20m20onhcc.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/8484039-dd9de8a294b0ad9b.png?imageMogr2/auto-orient/">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/8484039-2877bbf6e2eaddf2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/681/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/8484039-14de0910613d6e0c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/720/format/webp">
+<meta property="og:updated_time" content="2018-09-19T08:01:05.527Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="人脸识别简介">
+<meta name="twitter:description" content="概念人脸识别（Face Recognition）是一种依据人的面部特征进行身份识别，定位，查找的一种生物识别技术。生物特征识别技术所研究的生物特征包括脸、指纹、手掌纹、虹膜、视网膜、声音（语音）、体形、个人习惯（例如敲击键盘的力度和频率、签字）等，相应的识别技术就有人脸识别、指纹识别、掌纹识别、虹膜识别、视网膜识别、语音识别（用语音识别可以进行身份识别，也可以进行语音内容的识别，只有前者属于生物特">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/dxyoo7/dxyoo7.github.io/hexo/attachment/face_detection/auto_focus.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.ccwork.com.cn/2018/09/17/face recognize/"/>
+
+
+
+
+
+  <title>人脸识别简介 | 织语移动端</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">织语移动端</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.ccwork.com.cn/2018/09/17/face recognize/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="织语移动端">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="织语移动端">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">人脸识别简介</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-17T16:00:00+08:00">
+                2018-09-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/人工智能/" itemprop="url" rel="index">
+                    <span itemprop="name">人工智能</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>人脸识别（Face Recognition）是一种依据人的面部特征进行身份识别，定位，查找的一种生物识别技术。生物特征识别技术所研究的生物特征包括脸、指纹、手掌纹、虹膜、视网膜、声音（语音）、体形、个人习惯（例如敲击键盘的力度和频率、签字）等，相应的识别技术就有人脸识别、指纹识别、掌纹识别、虹膜识别、视网膜识别、语音识别（用语音识别可以进行身份识别，也可以进行语音内容的识别，只有前者属于生物特征识别技术）、体形识别、键盘敲击识别、签字识别等。</p>
+<h2 id="人脸识别特点"><a href="#人脸识别特点" class="headerlink" title="人脸识别特点"></a>人脸识别特点</h2><p>人脸识别的优点：</p>
+<ul>
+<li>直观：可以通过观察比较人脸来直接区分和确认身份，具有同类特性的还有语音识别，指纹识别不具备该特性。</li>
+<li>非强制性：人脸识别是利用可见光获取人脸图像信息，不同于指纹识别或者虹膜识别需要利用电子压力传感器采集指纹，人为配合才能完成采集。</li>
+<li>非接触性：用户在进行人脸识别的时候，并不需要和相关的摄影设备直接接触。</li>
+<li>并发性：实际应用场景中，人脸识别技术可以进行多个人脸的分拣、判断及识别。</li>
+</ul>
+<p>人脸识别的难点：</p>
+<ul>
+<li>识别率依赖环境：光照环境，人脸图像位置，清晰度，遮挡物等，都会影响识别成功率。</li>
+<li>人脸相似性：人类脸部存在相似性，不同个体之间的区别不大，所有的人脸的结构都相似，需要有足够智能的算法来区分出不同个体。</li>
+<li>人脸易变性：同样的人脸，也会面临着面部衰老，变化（胡须，眉毛等），人为改变（眼镜，化妆，整容等）等因素，增加识别的难度。</li>
+<li>人为因素：通过各种手段，人为的制造模拟的人脸图像（静态图片，3D模型等）。</li>
+</ul>
+<h2 id="人脸识别步骤"><a href="#人脸识别步骤" class="headerlink" title="人脸识别步骤"></a>人脸识别步骤</h2><p>人脸识别主要流程如下</p>
+<p>1.图像采集（Image Capture）</p>
+<p>人脸图像分为静态图像和动态图像，静态图像是指照片和静态的纸质图片等，动态图像主要来自于摄像机实时拍摄采集或者已有视频。</p>
+<p>2.人脸检测（Face Detection）</p>
+<p>人脸检测就是找出图像中所有的人脸</p>
+<p><img src="https://raw.githubusercontent.com/dxyoo7/dxyoo7.github.io/hexo/attachment/face_detection/auto_focus.jpg" alt=""></p>
+<p>能够实现人脸检测的算法非常多，原理也各不相同。最著名的当属 <a href="https://docs.opencv.org/3.4/d7/d8b/tutorial_py_face_detection.html" target="_blank" rel="noopener">Viola-Jones</a> 在 2001 年提出的算法，他们通过 Haar 特征和 AdaBoost 去训练级联分类器（Cascade Classfier）获得实时效果很好的人脸检测器，检测流程如下：</p>
+<ul>
+<li><p>图像预处理（将提取到的图片统一大小和灰度化）</p>
+<p>  <img src="https://raw.githubusercontent.com/dxyoo7/dxyoo7.github.io/hexo/attachment/face_detection/audrey_hepburn.jpg" alt=""></p>
+<p>  颜色信息对于人脸识别没有作用，灰度化和减少图片大小后，数据计算量和资源损耗大大减少，检测速度增加。</p>
+</li>
+<li><p>构造级联分类器（Cascade Classfier）</p>
+<p>  什么是级联的分类器呢？级联分类器是由若干个简单分类器级联成的一个大的分类器，被检测的窗口依次通过每一个分类器，可以通过所有分类器的窗口即可判定为目标区域。</p>
+<p>  加载已经训练好的内置模型 haarcascade_frontalface_alt.xml，构建级联分类器。分类器可以加载不同类型的模型，OpenCV 内置了很多模型</p>
+<p>  <img src="https://ws1.sinaimg.cn/large/676b2067gy1fvemrhqsj2j20ac0i0wgx.jpg" alt=""></p>
+<p>  其中 Haar 模型特征分为3种</p>
+<p>  <img src="http://dl2.iteye.com/upload/attachment/0014/3392/cce5515b-bd05-32e5-9ce2-12a9cfb839b1.png" alt=""></p>
+<ul>
+<li>边界特征，包含四种</li>
+<li>线性特征，包含8种</li>
+<li><p>中心围绕特征，包含两种</p>
+<p>分类器可以运用不同的模型对预处理后的图片提取出不同的特征值，特征值是检测人脸的关键数据。不同的模型直接影响检测的成功率，这里用的是 OpenCV 已经训练好的数据模型，不同的厂商可能都会有自己的模型训练方法。</p>
+</li>
+</ul>
+</li>
+<li><p>运用 AdaBoost 算法进行检测</p>
+<p>  将级联分类器和待检测图片一起 利用 AdaBoost 算法就能检测出图片中是否存在人脸，具体 AdaBoost 算法的原理，相对比较复杂，这里就不介绍了，可以详细查看 <a href="https://en.wikipedia.org/wiki/AdaBoost" target="_blank" rel="noopener">Wikipedia</a>。</p>
+</li>
+</ul>
+<p>iOS 代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// 图片灰度化</span><br><span class="line">cv::Mat matImage;</span><br><span class="line">UIImageToMat(image, matImage);</span><br><span class="line"></span><br><span class="line">// 转换颜色空间</span><br><span class="line">cv::Mat gray;</span><br><span class="line">cvtColor(matImage, gray, CV_BGR2GRAY);</span><br><span class="line"></span><br><span class="line">// 加载级联器</span><br><span class="line">NSString *filePath = [[NSBundle mainBundle] pathForResource:@&quot;haarcascade_frontalface_alt&quot; ofType:@&quot;xml&quot;];</span><br><span class="line">cv::CascadeClassifier classifier;</span><br><span class="line">classifier.load(filePath.UTF8String);</span><br><span class="line"></span><br><span class="line">// 运用 AdaBoost 算法进行人脸检测</span><br><span class="line">std::vector&lt;cv::Rect&gt; faces;</span><br><span class="line">classifier.detectMultiScale(gray, faces, 1.1, 2, 0, cv::Size(30, 30));</span><br><span class="line"></span><br><span class="line">// 是否包含人脸</span><br><span class="line">BOOL hasFace = faces.size() &gt; 0;</span><br></pre></td></tr></table></figure>
+<p>3.人脸校准（Face Alignment）</p>
+<p>人脸校准是给一张脸，找出特征点的位置，比如鼻子左侧，鼻孔下侧，瞳孔位置，上嘴唇下侧等等点的位置，如下图：</p>
+<p><img src="http://origin-images0.cnblogs.com/blog/537106/201504/052157319606741.png" alt=""></p>
+<p>图中红色的框就是在做 Detection，白色的点就是在做 Alignment。</p>
+<p><img src="https://raw.githubusercontent.com/dxyoo7/dxyoo7.github.io/hexo/attachment/face_detection/landmark_68_point.jpg" alt=""></p>
+<p>找到人脸上68个普遍存在的点（称为特征点，landmark）</p>
+<ul>
+<li>下巴轮廓17个点 [0-16]</li>
+<li>左眉毛5个点 [17-21]</li>
+<li>右眉毛5个点 [22-26]</li>
+<li>鼻梁4个点 [27-30]</li>
+<li>鼻尖5个点 [31-35]</li>
+<li>左眼6个点 [36-41]</li>
+<li>右眼6个点 [42-47]</li>
+<li>外嘴唇12个点 [48-59]</li>
+<li>内嘴唇8个点 [60-67]</li>
+</ul>
+<p>就可以知道眼睛和嘴巴在哪儿了，后续将图片进行旋转，缩放和错切，使得眼睛和嘴巴尽可能的靠近中心，人脸基本上就对齐了，经过校准之后人脸的识别率会更高。</p>
+<p>4.人脸识别（Face Identification）</p>
+<p>人脸识别这一块变数是最大的，有相对简单的离线方案，仅仅需要内置一些基础的样本数据，利用相关的算法就可以实现简单的识别功能。但这种方式实现的功能相对较弱，漏检率较高。另一种相对完善的方案是通过后台大数据配合深度学习，对统一实体自动构建出多种多样的数据模型，包括正面和反面的数据模型，来提高识别成功率。OpenCV 自带了三个人脸识别算法：Eigenfaces，Fisherfaces 和局部二值模式直方图 (LBPH)。这些算法都可以进行深度学习。</p>
+<h2 id="活体检测"><a href="#活体检测" class="headerlink" title="活体检测"></a>活体检测</h2><p>人脸检测方法多种多样，但所有的方法都会面临着各种各样的欺诈手段，常见的3种为：</p>
+<ul>
+<li>合法的用户人脸照片</li>
+<li>合法的用户人脸视频</li>
+<li>合法的用户3D模型或者面具头套</li>
+</ul>
+<p>面对这些欺诈手段时，一般采用活体检测技术来解决，活体检测实现的手段多种多样：</p>
+<ul>
+<li>基于运动检测，常见的有眨眼，动嘴等，该方式用户交互成本较高，欺诈成本较低。</li>
+<li>基于微纹理，利用假人脸经过二次采集后呈现与真实人脸的纹理差异检测</li>
+<li>基于多光谱，基于皮肤和其他材质在光谱放射率上的差异检测</li>
+</ul>
+<p>目前大部分免费或者开源的人脸识别代码库都不带活体检测功能，这里收集了一些开源代码备用</p>
+<p><a href="https://github.com/opencv/opencv_contrib" target="_blank" rel="noopener">opencv_contrib</a></p>
+<p><a href="https://github.com/June0611/EyeBlickCheck" target="_blank" rel="noopener">EyeBlickCheck</a></p>
+<p><a href="https://github.com/zeusees/Zeusee-Face-Anti-spoofing" target="_blank" rel="noopener">Zeusee-Face-Anti-spoofing</a></p>
+<h2 id="行业现状"><a href="#行业现状" class="headerlink" title="行业现状"></a>行业现状</h2><p>人脸识别系统的研究始于20世纪60年代，80年代后随着计算机技术和光学成像技术的发展得到提高，而真正进入初级的应用阶段则在90年后期。人脸识别系统成功的关键在于是否拥有尖端的核心算法，并使识别结果具有实用化的识别率和识别速度。国内的人脸识别企业较多，下图列举了目前人脸识别排行榜前几位的企业</p>
+<p><img src="https://ws1.sinaimg.cn/large/676b2067gy1fveu47yp43j20m20onhcc.jpg" alt=""></p>
+<p>其中前四家企业细分领域如下图</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/8484039-dd9de8a294b0ad9b.png?imageMogr2/auto-orient/" alt=""></p>
+<p>主要客户对比</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/8484039-2877bbf6e2eaddf2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/681/format/webp" alt=""></p>
+<p>盈利模式</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/8484039-14de0910613d6e0c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/720/format/webp" alt=""></p>
+<h2 id="企业开放-SDK"><a href="#企业开放-SDK" class="headerlink" title="企业开放 SDK"></a>企业开放 SDK</h2><p>企业开放的人脸识别 SDK 分为在线和离线两种方案，在线方案以服务端为主，通过服务端对接 SDK 提供的 API，客户端只需要跟自己的服务端交互即可。这种方案适合服务端资源较充裕，而且对人脸识别及时性要求不是非常高的情况下使用。同时服务端可以充分利用大数据和深度学习相结合，发展出更多的应用场景。离线方案，是指客户端直接嵌入 SDK 供应商提供的离线 SDK，不需要与服务器交互，直接能够获取到识别后的结果。该方案使用场景较单一，适合轻量级接入到客户端，不依赖网络。</p>
+<p>下面是部分人脸识别厂商的对比</p>
+<table>
+<thead>
+<tr>
+<th>企业</th>
+<th>公开提供 SDK</th>
+<th>支持离线 SDK</th>
+<th>收费方案</th>
+<th>产品缺陷</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://www.faceplusplus.com.cn/face-compare-sdk/tech-specs-pricing/" target="_blank" rel="noopener">旷视</a>（Face++）</td>
+<td>是</td>
+<td>是</td>
+<td>单平台按年收费</td>
+<td>暂无</td>
+</tr>
+<tr>
+<td><a href="https://www.sensetime.com/index/apply/index" target="_blank" rel="noopener">商汤</a>（SenseTime）</td>
+<td>否</td>
+<td>是</td>
+<td>未公开</td>
+<td>暂无</td>
+</tr>
+<tr>
+<td><a href="http://www.cloudwalk.cn/sdkplus.html" target="_blank" rel="noopener">云从</a></td>
+<td>是</td>
+<td>是</td>
+<td>未公开</td>
+<td>暂无</td>
+</tr>
+<tr>
+<td><a href="http://www.yitutech.com/case/" target="_blank" rel="noopener">依图</a></td>
+<td>否</td>
+<td>是</td>
+<td>未公开</td>
+<td>暂无</td>
+</tr>
+<tr>
+<td><a href="https://ai.baidu.com/tech/face/offline-sdk" target="_blank" rel="noopener">百度</a></td>
+<td>是</td>
+<td>是</td>
+<td>按授权码个数收费</td>
+<td>iOS 端不支持离线 SDK</td>
+</tr>
+<tr>
+<td><a href="https://open.youtu.qq.com/legency/#/develop/new-platform" target="_blank" rel="noopener">腾讯优图</a></td>
+<td>是</td>
+<td>否</td>
+<td>按 API 调用次数收费</td>
+<td>不支持离线 SDK</td>
+</tr>
+<tr>
+<td><a href="https://help.aliyun.com/document_detail/53379.html?spm=a2c4g.11174283.6.546.17615d0djnUjEi" target="_blank" rel="noopener">阿里云</a></td>
+<td>是</td>
+<td>否</td>
+<td>按 API 调用次数收费</td>
+<td>不支持离线 SDK</td>
+</tr>
+<tr>
+<td><a href="http://www.arcsoft.com.cn/index.html" target="_blank" rel="noopener">虹软</a>（ArcSoft）</td>
+<td>是</td>
+<td>是</td>
+<td>永久免费、闭源（每年授权一次）</td>
+<td>识别率一般，活体检测功能只在 Android 端公测</td>
+</tr>
+</tbody>
+</table>
+<h2 id="开源项目"><a href="#开源项目" class="headerlink" title="开源项目"></a>开源项目</h2><p><a href="https://github.com/opencv/opencv" target="_blank" rel="noopener">OpenCV</a></p>
+<p>OpenCV 是一个基于 BSD 许可（开源）发行的跨平台计算机视觉库，包括人机互动，图像分割，人脸识别，机器视觉等应用领域的开源成果。</p>
+<p><a href="https://github.com/cmusatyalab/openface" target="_blank" rel="noopener">OpenFace</a> </p>
+<p>基于 <a href="https://github.com/davidsandberg/facenet" target="_blank" rel="noopener">FaceNet</a> 和 OpenCV 的实现的 OpenFace 开源库，是用 Python 开发的服务端程序。OpenFace 最主要的特色是依赖大数据进行基于深度神经网络的学习。</p>
+<p><a href="https://github.com/seetaface/SeetaFaceEngine" target="_blank" rel="noopener">SeetaFace</a> </p>
+<p>中科院 <a href="http://iip.ict.ac.cn/members/shiguang-shan" target="_blank" rel="noopener">山世光</a> 老师开源，包含人脸检测，人脸对齐，人脸识别三个模块。基于 OpenCV 开发，同时对算法做了一些改进。但是在人脸检测速度上相对较慢，漏检率较高，这里有<a href="https://blog.csdn.net/qq_14845119/article/details/52641735" target="_blank" rel="noopener">实测样本</a>。</p>
+<h2 id="开源方案商业化落地的缺陷"><a href="#开源方案商业化落地的缺陷" class="headerlink" title="开源方案商业化落地的缺陷"></a>开源方案商业化落地的缺陷</h2><ul>
+<li>漏检率较高</li>
+<li>1 : N （多人识别）的识别率较低，识别较慢</li>
+<li>活体检测功能较弱</li>
+<li>离线方案没有深度学习能力</li>
+</ul>
+<h2 id="Demo演示"><a href="#Demo演示" class="headerlink" title="Demo演示"></a>Demo演示</h2><p><a href="https://github.com/asjec/ArcFace" target="_blank" rel="noopener">ArcFaceDemo</a></p>
+<h2 id="行业应用和产品落地讨论"><a href="#行业应用和产品落地讨论" class="headerlink" title="行业应用和产品落地讨论"></a>行业应用和产品落地讨论</h2><p>有了上面的技术探索和实践，大家可以讨论一下，人脸识别在织语产品上的落地方案。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/03/Multithread Programming/" rel="next" title="多线程编程(编辑中...)">
+                <i class="fa fa-chevron-left"></i> 多线程编程(编辑中...)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">织语移动端</p>
+              <p class="site-description motion-element" itemprop="description">专注于工作协同的IM平台</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#人脸识别特点"><span class="nav-number">2.</span> <span class="nav-text">人脸识别特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#人脸识别步骤"><span class="nav-number">3.</span> <span class="nav-text">人脸识别步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#活体检测"><span class="nav-number">4.</span> <span class="nav-text">活体检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#行业现状"><span class="nav-number">5.</span> <span class="nav-text">行业现状</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#企业开放-SDK"><span class="nav-number">6.</span> <span class="nav-text">企业开放 SDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开源项目"><span class="nav-number">7.</span> <span class="nav-text">开源项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开源方案商业化落地的缺陷"><span class="nav-number">8.</span> <span class="nav-text">开源方案商业化落地的缺陷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Demo演示"><span class="nav-number">9.</span> <span class="nav-text">Demo演示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#行业应用和产品落地讨论"><span class="nav-number">10.</span> <span class="nav-text">行业应用和产品落地讨论</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">织语移动端</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

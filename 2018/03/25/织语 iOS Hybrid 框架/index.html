@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言Hybrid 作为一种混合开发模式，依赖 Native 端的 Web 容器（UIWebView / WKWebView），上层使用 H5、JS 做业务开发。这种开发模式，非常有利于办公协同APP的开放平台搭建，由 Native 端提供API，供第三方使用开发、快速迭代。 Hybrid APP 框架一个完整的 Hybrid APP 框架主要包括 Manager、WebView 、Bridge、C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="织语 iOS Hybrid 框架">
+<meta property="og:url" content="http://www.ccwork.com.cn/2018/03/25/织语 iOS Hybrid 框架/index.html">
+<meta property="og:site_name" content="织语移动端">
+<meta property="og:description" content="前言Hybrid 作为一种混合开发模式，依赖 Native 端的 Web 容器（UIWebView / WKWebView），上层使用 H5、JS 做业务开发。这种开发模式，非常有利于办公协同APP的开放平台搭建，由 Native 端提供API，供第三方使用开发、快速迭代。 Hybrid APP 框架一个完整的 Hybrid APP 框架主要包括 Manager、WebView 、Bridge、C">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://o8anxf7e1.bkt.clouddn.com/Hybrid%E6%A1%86%E6%9E%B6.png">
+<meta property="og:image" content="http://o8anxf7e1.bkt.clouddn.com/%E4%BA%A4%E4%BA%92%E6%96%B9%E5%BC%8F%E6%80%A7%E8%83%BD%E5%AF%B9%E6%AF%94.png">
+<meta property="og:image" content="http://o8anxf7e1.bkt.clouddn.com/bridge%E6%B5%81%E7%A8%8B.png">
+<meta property="og:updated_time" content="2018-03-26T02:04:22.529Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="织语 iOS Hybrid 框架">
+<meta name="twitter:description" content="前言Hybrid 作为一种混合开发模式，依赖 Native 端的 Web 容器（UIWebView / WKWebView），上层使用 H5、JS 做业务开发。这种开发模式，非常有利于办公协同APP的开放平台搭建，由 Native 端提供API，供第三方使用开发、快速迭代。 Hybrid APP 框架一个完整的 Hybrid APP 框架主要包括 Manager、WebView 、Bridge、C">
+<meta name="twitter:image" content="http://o8anxf7e1.bkt.clouddn.com/Hybrid%E6%A1%86%E6%9E%B6.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.ccwork.com.cn/2018/03/25/织语 iOS Hybrid 框架/"/>
+
+
+
+
+
+  <title>织语 iOS Hybrid 框架 | 织语移动端</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">织语移动端</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.ccwork.com.cn/2018/03/25/织语 iOS Hybrid 框架/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="织语移动端">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="织语移动端">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">织语 iOS Hybrid 框架</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-25T15:36:25+08:00">
+                2018-03-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hybrid开发/" itemprop="url" rel="index">
+                    <span itemprop="name">Hybrid开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Hybrid 作为一种混合开发模式，依赖 Native 端的 Web 容器（UIWebView / WKWebView），上层使用 H5、JS 做业务开发。这种开发模式，非常有利于办公协同APP的开放平台搭建，由 Native 端提供API，供第三方使用开发、快速迭代。</p>
+<h2 id="Hybrid-APP-框架"><a href="#Hybrid-APP-框架" class="headerlink" title="Hybrid APP 框架"></a>Hybrid APP 框架</h2><p>一个完整的 Hybrid APP 框架主要包括 Manager、WebView 、Bridge、Cache 等模块。整个框架设计理念是组合，而不是继承，因此框架设计的不是一个 XXWebView / XXWebViewController 基类，使用者不需要在业务代码中继承 WebView 。框架设计的是一个 Manager 对象，使用者只需要跟自己业务中的任意一种 WebView 进行绑定，就可以拥有 Hybrid 的能力。</p>
+<ul>
+<li><p>Manager 作为核心，负责处理 Hybrid 业务，校验和注册API</p>
+</li>
+<li><p>WebView 作为容器，负责展示前端页面，响应前端交互</p>
+</li>
+<li><p>Bridge 作为桥梁，负责 Native 和 JS 之间通信交互</p>
+</li>
+<li><p>Cache 作为缓存，负责缓存资源文件等</p>
+</li>
+</ul>
+<p>框架结构如下：</p>
+<p><img src="http://o8anxf7e1.bkt.clouddn.com/Hybrid%E6%A1%86%E6%9E%B6.png" alt="Hybrid 框架"></p>
+<h2 id="WebView-容器"><a href="#WebView-容器" class="headerlink" title="WebView 容器"></a>WebView 容器</h2><p>iOS8 以后苹果推出了一套新的 WKWebView，对于 UIWebView 和 WKWebView 的区别，可以参考 <a href="https://mp.weixin.qq.com/s?__biz=MzI1MTE2NTE1Ng==&amp;mid=2649516616&amp;idx=1&amp;sn=c16a7fc0ddaee2a6d5e1ad10373af9e3&amp;chksm=f1efeac3c69863d5942da9ba250c39e29af97a7c1ac22fce49d65dc3967c49c811b0f566b2c6#rd" target="_blank" rel="noopener">教你使用 WKWebView 的正确姿势</a>，本框架暂时选用 WKWebView 作为容器，针对 WKWebView 的问题，本框架做了以下解决方案：</p>
+<h4 id="Cookie-问题"><a href="#Cookie-问题" class="headerlink" title="Cookie 问题"></a>Cookie 问题</h4><p>前端抛弃对 Cookie 的依赖，改为使用 H5 的 Storage 能力。另 Native 提供存读接口，以备前端使用存储功能。</p>
+<h4 id="NSURLProtocol-支持"><a href="#NSURLProtocol-支持" class="headerlink" title="NSURLProtocol 支持"></a>NSURLProtocol 支持</h4><p>WKWebView 包含一个 <code>browsingContextController</code> 属性对象，该对象提供了 <code>registerSchemeForCustomProtocol</code> 和 <code>unregisterSchemeForCustomProtocol</code> 两个方法，能通过注册 scheme 来代理同类请求，符合注册 scheme 类型的请求会走 NSURLProtocol 协议。但是这种方案存在两个严重缺陷：post 请求 body 数据被清空；对 ATS 支持不足。</p>
+<h4 id="跨域访问"><a href="#跨域访问" class="headerlink" title="跨域访问"></a>跨域访问</h4><p>iOS9 以后，可以通过 KVC 设置 <code>WKPreferences</code> 的 <code>allowFileAccessFromFileURLs</code> 和 <code>allowUniversalAccessFromFileURLs</code> 属性，来打开跨域访问。但是 iOS8 暂不支持。</p>
+<h4 id="Crash-白屏问题"><a href="#Crash-白屏问题" class="headerlink" title="Crash 白屏问题"></a>Crash 白屏问题</h4><p>在 WKWebView 白屏的时候，<code>webView.title</code> 会被置空，因此，可以在 <code>viewWillAppear</code> 的时候检测 <code>webView.title</code> 是否为空来 reload 页面。</p>
+<h4 id="缓存问题"><a href="#缓存问题" class="headerlink" title="缓存问题"></a>缓存问题</h4><p>针对单个资源文件，可以对该资源地址加时间戳避开缓存。针对全局资源文件，需要手动清理缓存，iOS9 以后，系统提供了缓存管理接口 <code>WKWebsiteDataStore</code>。而 iOS8，只能通过手动删除文件来解决了，WKWebView 的缓存数据会存储在 <code>~/Library/Caches/BundleID/WebKit/</code> 目录下，可通过删除该目录来实现清理缓存。</p>
+<h2 id="Bridge"><a href="#Bridge" class="headerlink" title="Bridge"></a>Bridge</h2><p>由于容器选择是 WKWebView，所以 JS 调用 Native 端有两种方式 <code>URL拦截</code> 和 <code>messageHandler</code> 。下图为两种方式性能对比</p>
+<p><img src="http://o8anxf7e1.bkt.clouddn.com/%E4%BA%A4%E4%BA%92%E6%96%B9%E5%BC%8F%E6%80%A7%E8%83%BD%E5%AF%B9%E6%AF%94.png" alt="性能对比"></p>
+<p><code>messageHandler</code> 对比 <code>URL拦截</code> 性能大约提升了 20%，受益于 WKWebView，本框架采用 <code>messageHandler</code> + <code>evaluatingJavaScript</code> 的方式进行通信交互。</p>
+<h4 id="JS-gt-Native"><a href="#JS-gt-Native" class="headerlink" title="JS -&gt; Native"></a>JS -&gt; Native</h4><h5 id="Native-注入对象"><a href="#Native-注入对象" class="headerlink" title="Native 注入对象"></a>Native 注入对象</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//配置对象注入</span><br><span class="line">[self.webView.configuration.userContentController addScriptMessageHandler:self name:@&quot;nativeObject&quot;];</span><br><span class="line">//移除对象注入</span><br><span class="line">[self.webView.configuration.userContentController removeScriptMessageHandlerForName:@&quot;nativeObject&quot;];</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：如果当前 WebView 没用了，需要先移除这个对象注入，否则会造成内存泄漏，WebView 和所在 VC 循环引用，无法销毁。</p>
+</blockquote>
+<h5 id="JS-调用"><a href="#JS-调用" class="headerlink" title="JS 调用"></a>JS 调用</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//准备要传给native的数据，包括指令，数据，回调等</span><br><span class="line">var data = &#123;</span><br><span class="line">    action:&apos;xxxx&apos;,</span><br><span class="line">    params:&apos;xxxx&apos;,</span><br><span class="line">    callback:&apos;xxxx&apos;,</span><br><span class="line">&#125;;</span><br><span class="line">//传递给客户端</span><br><span class="line">window.webkit.messageHandlers.nativeObject.postMessage(data);</span><br></pre></td></tr></table></figure>
+<h5 id="Native-接收调用"><a href="#Native-接收调用" class="headerlink" title="Native 接收调用"></a>Native 接收调用</h5><p>当 JS 开始调用后，会调用到指定的 WKScriptMessageHandler 代理对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-(void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message &#123;</span><br><span class="line">    //1 取出 name 是否与注入 name 匹配</span><br><span class="line">    if (message.name isEqualToString:@&quot;nativeObject&quot;) &#123;</span><br><span class="line">        //2 取出对象，做后续操作</span><br><span class="line">        NSDictionary *msgBody = message.body;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Native-gt-JS"><a href="#Native-gt-JS" class="headerlink" title="Native -&gt; JS"></a>Native -&gt; JS</h4><p>对于 WKWebView ，除了<code>evaluatingJavaScript</code>，还有 WKUserScript 这个方式可以执行 JS 代码，他们之间是有区别的</p>
+<ul>
+<li><p><code>evaluatingJavaScript</code> 是在客户端执行这条代码的时候立刻去执行当条JS代码</p>
+</li>
+<li><p>WKUserScript 是预先准备好JS代码，当 WKWebView 加载 Dom 的时候，执行当条 JS 代码</p>
+</li>
+</ul>
+<p>很明显这个虽然是一种通信方式，但并不能随时随地进行通信，并不适合选则作为设计 Bridge 的核心方案。</p>
+<h4 id="注入时机"><a href="#注入时机" class="headerlink" title="注入时机"></a>注入时机</h4><p>并不是所有前端页面都需要用到 Native 能力，因此在需要用到 Native 能力的页面，才注入 JS 代码，为其提供 Native 能力。与前端约定，如果需要，就假跳转至一个指定的 <code>URL</code>, 然后客户端在代理方法 <code>webView:(WKWebView *)webViewdecidePolicyForNavigationAction:decisionHandler:</code> 里判断 <code>URL</code> 是否为指定的 <code>URL</code>，如果是，则执行注入。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler &#123;</span><br><span class="line">    NSURL *url = navigationAction.request.URL;</span><br><span class="line">    if ([url.absoluteString isEqualToString:@&quot;指定URL&quot;]) &#123;</span><br><span class="line">        // 执行注入 JS 代码</span><br><span class="line">        </span><br><span class="line">        decisionHandler(WKNavigationActionPolicyCancel);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    decisionHandler(WKNavigationActionPolicyAllow);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Bridge-框架"><a href="#Bridge-框架" class="headerlink" title="Bridge 框架"></a>Bridge 框架</h4><p>整个 Native 和 JS 的 Bridge 交互流程如下图所示：</p>
+<p><img src="http://o8anxf7e1.bkt.clouddn.com/bridge%E6%B5%81%E7%A8%8B.png" alt="brdige流程"></p>
+<p>在 Native / JS 端，创建 Bridge 对象，该对象需包含：</p>
+<h5 id="property"><a href="#property" class="headerlink" title="property"></a>property</h5><ul>
+<li>messageHandlers 字典，以 handlerName 作为 key，保存对应 function</li>
+<li>responseCallbacks 字典，以 callbackId 作为 key，保存响应 function</li>
+</ul>
+<h5 id="function"><a href="#function" class="headerlink" title="function"></a>function</h5><ul>
+<li>doSend: 调用另一端方法，传递 message 字典参数</li>
+<li>responseAnotherMethod: 响应另一端的调用，接收 message 字典参数</li>
+</ul>
+<h2 id="Manager"><a href="#Manager" class="headerlink" title="Manager"></a>Manager</h2><p>Manager 为整个 Hybrid 核心，负责 JS 方法到 Native 端的映射，可灵活扩展。利用 runtime 特性，使用得到的 className 和 functionName 反射出指定的对象，并执行指定函数。</p>
+<h4 id="权限验证"><a href="#权限验证" class="headerlink" title="权限验证"></a>权限验证</h4><p>针对打开的 WebView, 是否拥有合法使用 Hybrid 的权限需要进行验证，只有验证通过的页面，才能使用原生提供的能力。Manager 提供入口，具体验证由上层实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)authenticationSignatureParameter:(NSDictionary *)parameter comlete:(void (^)(NSError *error))complete;</span><br></pre></td></tr></table></figure>
+<h4 id="组件协议"><a href="#组件协议" class="headerlink" title="组件协议"></a>组件协议</h4><p>JS 页面加载完，在使用 Native 能力之前，需要进行注册，即告知 Native 当前页面所需要使用的 API 列表。Manager 处理该流程，验证 Native 是否实现该 API，同时把 API 转换成对象，对象遵循以下协议：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@protocol KKWebViewJSApiBaseProtocol &lt;NSObject&gt;</span><br><span class="line"></span><br><span class="line">@required</span><br><span class="line">/// api名字</span><br><span class="line">@property (nonatomic, copy) NSString *apiName;</span><br><span class="line">/// 是否支持js多次回调</span><br><span class="line">@property (nonatomic, assign) NSInteger isNeedRegistId;</span><br><span class="line">/// 是否为事件类型，客户端调用，类似发通知给JS</span><br><span class="line">@property (nonatomic, assign) NSInteger isEvent;</span><br><span class="line">/// api接口参数数据</span><br><span class="line">@property (nonatomic, strong) NSDictionary *paramData;</span><br><span class="line">/// api接口响应回调</span><br><span class="line">@property (nonatomic, copy) WVJBResponseCallback responseCallback;</span><br><span class="line"></span><br><span class="line">@property (nonatomic, weak) KKWebViewJavaScriptManager *jsManager;</span><br><span class="line"></span><br><span class="line">@end;</span><br></pre></td></tr></table></figure>
+<h4 id="反射函数"><a href="#反射函数" class="headerlink" title="反射函数"></a>反射函数</h4><p>Manager 把 API 转换成对象时，利用 Objective-C 的 runtime 反射机制：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Class cls = NSClassFromString(className);</span><br><span class="line">if ([cls conformsToProtocol:@protocol(KKWebViewJSApiBaseProtocol)]) &#123;</span><br><span class="line">    id&lt;KKWebViewJSApiBaseProtocol&gt; obj = [[cls alloc] init];</span><br><span class="line">    if ([obj respondsToSelector:NSSelectorFromString(functionName)]) &#123;</span><br><span class="line">#pragma clang diagnostic push</span><br><span class="line">#pragma clang diagnostic ignored &quot;-Warc-performSelector-leaks&quot;</span><br><span class="line">        [obj performSelector:NSSelectorFromString(functionName)];</span><br><span class="line">#pragma clang diagnostic pop</span><br><span class="line">        return obj;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        NSLog(@&quot;function is not found&quot;);</span><br><span class="line">        return nil;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    NSLog(@&quot;clss is not found&quot;);</span><br><span class="line">     return nil;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><a href="https://github.com/cozelight/JSSDK" target="_blank" rel="noopener">Demo链接</a></p>
+</blockquote>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://mp.weixin.qq.com/s?__biz=MzI1MTE2NTE1Ng==&amp;mid=2649516616&amp;idx=1&amp;sn=c16a7fc0ddaee2a6d5e1ad10373af9e3&amp;chksm=f1efeac3c69863d5942da9ba250c39e29af97a7c1ac22fce49d65dc3967c49c811b0f566b2c6#rd" target="_blank" rel="noopener">教你使用 WKWebView 的正确姿势</a></p>
+<p><a href="https://mp.weixin.qq.com/s/rhYKLIbXOsUJC_n6dt9UfA" target="_blank" rel="noopener">WKWebView 那些坑</a></p>
+<p><a href="http://www.cnblogs.com/yexiaochai/p/4921635.html" target="_blank" rel="noopener">浅谈Hybrid技术的设计与实现</a></p>
+<p><a href="https://lvwenhan.com/ios/460.html" target="_blank" rel="noopener">自己动手打造基于 WKWebView 的混合开发框架</a></p>
+<p><a href="http://blog.csdn.net/byeweiyang/article/details/75102051" target="_blank" rel="noopener">58 同城 iOS 客户端 Hybrid 框架探索</a></p>
+<p><a href="http://awhisper.github.io/2018/01/02/hybrid-jscomunication/" target="_blank" rel="noopener">从零收拾一个hybrid框架</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/21/code-review-practise/" rel="next" title="小团队Code Review实践">
+                <i class="fa fa-chevron-left"></i> 小团队Code Review实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/03/Multithread Programming/" rel="prev" title="多线程编程(编辑中...)">
+                多线程编程(编辑中...) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">织语移动端</p>
+              <p class="site-description motion-element" itemprop="description">专注于工作协同的IM平台</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hybrid-APP-框架"><span class="nav-number">2.</span> <span class="nav-text">Hybrid APP 框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WebView-容器"><span class="nav-number">3.</span> <span class="nav-text">WebView 容器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Cookie-问题"><span class="nav-number">3.0.1.</span> <span class="nav-text">Cookie 问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NSURLProtocol-支持"><span class="nav-number">3.0.2.</span> <span class="nav-text">NSURLProtocol 支持</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跨域访问"><span class="nav-number">3.0.3.</span> <span class="nav-text">跨域访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Crash-白屏问题"><span class="nav-number">3.0.4.</span> <span class="nav-text">Crash 白屏问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存问题"><span class="nav-number">3.0.5.</span> <span class="nav-text">缓存问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bridge"><span class="nav-number">4.</span> <span class="nav-text">Bridge</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#JS-gt-Native"><span class="nav-number">4.0.1.</span> <span class="nav-text">JS -&gt; Native</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Native-注入对象"><span class="nav-number">4.0.1.1.</span> <span class="nav-text">Native 注入对象</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#JS-调用"><span class="nav-number">4.0.1.2.</span> <span class="nav-text">JS 调用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Native-接收调用"><span class="nav-number">4.0.1.3.</span> <span class="nav-text">Native 接收调用</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Native-gt-JS"><span class="nav-number">4.0.2.</span> <span class="nav-text">Native -&gt; JS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注入时机"><span class="nav-number">4.0.3.</span> <span class="nav-text">注入时机</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Bridge-框架"><span class="nav-number">4.0.4.</span> <span class="nav-text">Bridge 框架</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#property"><span class="nav-number">4.0.4.1.</span> <span class="nav-text">property</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#function"><span class="nav-number">4.0.4.2.</span> <span class="nav-text">function</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Manager"><span class="nav-number">5.</span> <span class="nav-text">Manager</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#权限验证"><span class="nav-number">5.0.1.</span> <span class="nav-text">权限验证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#组件协议"><span class="nav-number">5.0.2.</span> <span class="nav-text">组件协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#反射函数"><span class="nav-number">5.0.3.</span> <span class="nav-text">反射函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">6.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">织语移动端</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
